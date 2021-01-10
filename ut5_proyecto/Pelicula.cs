@@ -11,23 +11,23 @@ namespace ut5_proyecto
     public class Pelicula : INotifyPropertyChanged
     {
 
-        public enum Dificultad { facil, normal, dificil }
+        
 
-        public enum Genero { comedia, drama, accion, terror, cienciaFiccion }
+        
         
         private string titulo;
         private string pista;
         private string imagen;
-        private Dificultad dificultad;
-        private Genero genero;
+        private string dificultad;
+        private string genero;
 
-        public Pelicula(string titulo, string pista, string imagen, Dificultad dificultad, Genero genero)
+        public Pelicula(string titulo, string pista, string imagen, string dificultad, string genero)
         {
             Titulo = titulo;
             Pista = pista;
             Imagen = imagen;
-            _Dificultad = dificultad;
-            _Genero = genero;
+            Dificultad = dificultad;
+            Genero = genero;
         }
 
         public Pelicula()
@@ -35,8 +35,8 @@ namespace ut5_proyecto
             Titulo = "";
             Pista = "";
             Imagen = "";
-            _Dificultad = Dificultad.facil;
-            _Genero = Genero.accion;
+            Dificultad = "";
+            Genero = "";
         }
 
         public string Titulo 
@@ -72,24 +72,24 @@ namespace ut5_proyecto
         }
 
 
-        public Dificultad _Dificultad
+        public string Dificultad
         {
             get { return dificultad; }
             set 
             { 
                 dificultad = value;
-                NotifyPropertyChanged("_Dificultad");
+                NotifyPropertyChanged("Dificultad");
             }
         }
 
 
-        public Genero _Genero
+        public string Genero
         {
             get { return genero; }
             set 
             { 
                 genero = value;
-                NotifyPropertyChanged("_Genero");
+                NotifyPropertyChanged("Genero");
             }
         }
 

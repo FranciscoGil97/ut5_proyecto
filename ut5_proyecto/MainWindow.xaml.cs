@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+
 namespace ut5_proyecto
 {
     /// <summary>
@@ -22,27 +24,65 @@ namespace ut5_proyecto
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Pelicula> peliculas;
 
+        private ObservableCollection<Pelicula> peliculas;
+        string[] dificultades = { "facil", "normal", "dificil" };
+        string[] generos = { "comedia", "drama", "acción", "terror", "ciencia-ficción" };
         public MainWindow()
         {
             InitializeComponent();
 
-            peliculas = new ObservableCollection<Pelicula>();
-            peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", Pelicula.Dificultad.facil, Pelicula.Genero.accion));
-            listaPeliculas.DataContext = peliculas;
-            ObservableCollection<string> generos = new ObservableCollection<string>();
-            generos.Add("Comedia");
-            generos.Add("terror");
-            generos.Add("Comedia2");
-            generos.Add("terror2");
 
-            generosComboBox.DataContext = generos;
-            generosComboBox.SelectedItem = generos[0];
+            peliculas = new ObservableCollection<Pelicula>();
+            peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", "facil", "drama"));
+            peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", "normal", "acción"));
+
+            listaPeliculas.DataContext = peliculas;
+            generosComboBox.ItemsSource = generos;
         }
 
+        private void ListaPeliculas_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listaPeliculas.SelectedItem != null)
+            {
+                generosComboBox.DataContext = (Pelicula)listaPeliculas.SelectedItem;
+                SeleccionaRaddioButton(((Pelicula)listaPeliculas.SelectedItem).Dificultad);
+                camposGrid.DataContext = (Pelicula)listaPeliculas.SelectedItem;
+            }
+        }
 
+        private void DificultadRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
 
+            if (rb.Tag.ToString() == dificultades[0])
+                ((Pelicula)listaPeliculas.SelectedItem).Dificultad = dificultades[0];
+            else
+                ((Pelicula)listaPeliculas.SelectedItem).Dificultad =
+                        rb.Tag.ToString() == dificultades[1] ? dificultades[1] : dificultades[2];
+
+        }
+
+        private void SeleccionaRaddioButton(string dificultad)
+        {
+            if (dificultad == dificultades[0])
+                facilRadioButton.IsChecked = true;
+            else if (dificultad == dificultades[1])
+                normalRadioButton.IsChecked = true;
+            else
+                dificilRadioButton.IsChecked = true;
+        }
+
+        private void EliminarPeliculaButton_Click(object sender, RoutedEventArgs e)
+        {
+            facilRadioButton.IsChecked =  false;
+            normalRadioButton.IsChecked = false;
+            dificilRadioButton.IsChecked =false;
+            generosComboBox.DataContext = "";
+            camposGrid.DataContext = "";
+            peliculas.Remove((Pelicula)listaPeliculas.SelectedItem);
+            listaPeliculas.SelectedItem = null;
+        }
 
 
         //guardar archivo abriendo un dialogo
@@ -57,11 +97,11 @@ namespace ut5_proyecto
         ////< Button
         ////    Name = "btnSaveFile"
         ////    Click = "btnSaveFile_Click" > Save file </ Button >
-    
+
         ////    < Button
         ////    Name = "btnOpenFile"
         ////    Click = "btnOpenFile_Click" > Open file </ Button >
-    
+
         ////</ StackPanel >
         //        SaveFileDialog saveFileDialog = new SaveFileDialog();
         //    if (saveFileDialog.ShowDialog() == true)
@@ -75,5 +115,24 @@ namespace ut5_proyecto
         //    if (openFileDialog.ShowDialog() == true)
         //        txtEditor.Text = File.ReadAllText(openFileDialog.FileName);
         //}
+
+
+        private void ExportarButton_Click(object sender, RoutedEventArgs e)
+        {
+            string personasJson = JsonConvert.SerializeObject(peliculas);
+            File.WriteAllText("peliculas.json", personasJson);
+        }
+
+        private void ImportarButton_Click(object sender, RoutedEventArgs e)
+        {
+            using (StreamReader jsonStream = File.OpenText("peliculas.json"))
+            {
+                var json = jsonStream.ReadToEnd();
+                List<Pelicula> peliculasJson = JsonConvert.DeserializeObject<List<Pelicula>>(json);
+
+                foreach (Pelicula p in peliculasJson)
+                    peliculas.Add(p);
+            }
+        }
     }
 }

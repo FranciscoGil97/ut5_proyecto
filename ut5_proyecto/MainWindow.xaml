@@ -106,26 +106,34 @@
                         <Button
                             x:Name="cargarJsonButton"
                             Margin="3,0"
-                            DockPanel.Dock="Top">Cargar de JSON</Button>
+                            DockPanel.Dock="Top"
+                            Click="ImportarButton_Click">Cargar de JSON</Button>
                         <Button
                             x:Name="guardarJsonButton"
                             Margin="3,8"
-                            DockPanel.Dock="Top">Guardar en Json</Button>
+                            DockPanel.Dock="Top"
+                            Click="ExportarButton_Click">Guardar en Json</Button>
                         <Button
                             x:Name="eliminarPeliculaButton"
                             Margin="3,50,3,5"
-                            DockPanel.Dock="Top">Eliminar película</Button>
+                            DockPanel.Dock="Top"
+                            Click="EliminarPeliculaButton_Click">Eliminar película</Button>
+
                         <Button
                             x:Name="addPeliculaButton"
                             Margin="3"
                             DockPanel.Dock="Top">Añadir película</Button>
+                        <TextBlock
+                            x:Name="prueba"
+                            DockPanel.Dock="Top"></TextBlock>
                         <Button
                             x:Name="examinarPeliculasButton"
-                            Margin="3,0,3,30"
+                            Margin="0,0,3,62"
                             DockPanel.Dock="Bottom">Examinar</Button>
                     </DockPanel>
 
                     <Grid
+                        x:Name="camposGrid"
                         DockPanel.Dock="Bottom"
                         Margin="10"
                         Height="150">
@@ -151,8 +159,9 @@
                             VerticalAlignment="Center" />
                         <TextBox
                             x:Name="tituloPeliculaTextBox"
+                            Text="{Binding Path=Titulo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Grid.Row="0"
-                            Grid.Column="1" />
+                            Grid.Column="1"/>
 
                         <TextBlock
                             Grid.Row="1"
@@ -161,6 +170,7 @@
                             VerticalAlignment="Center" />
                         <TextBox
                             x:Name="pistaPeliculaTextBox"
+                            Text="{Binding Path=Pista, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Grid.Row="1"
                             Grid.Column="1" />
 
@@ -171,6 +181,7 @@
                             VerticalAlignment="Center" />
                         <TextBox
                             x:Name="imagenPeliculaTextBox"
+                            Text="{Binding Path=Imagen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Grid.Row="2"
                             Grid.Column="1" />
 
@@ -186,13 +197,19 @@
                             Grid.Column="1">
                             <RadioButton
                                 x:Name="facilRadioButton"
-                                Content="Fácil" />
+                                Content="Fácil"
+                                Tag="facil"
+                                Checked="DificultadRadioButton_Checked" />
                             <RadioButton
                                 x:Name="normalRadioButton"
-                                Content="Normal" />
+                                Content="Normal"
+                                Tag="normal"
+                                Checked="DificultadRadioButton_Checked" />
                             <RadioButton
                                 x:Name="dificilRadioButton"
-                                Content="Difícil" />
+                                Content="Difícil"
+                                Tag="dificil"
+                                Checked="DificultadRadioButton_Checked" />
                         </StackPanel>
 
                         <StackPanel
@@ -203,11 +220,11 @@
                                 Text="Género"
                                 VerticalAlignment="Center" />
                             <ComboBox
-                                VerticalAlignment="Center" 
+                                VerticalAlignment="Center"
                                 x:Name="generosComboBox"
-                                ItemsSource="{Binding}"
                                 Margin="10,0"
-                                Width="100"/>
+                                Width="100"
+                                SelectedItem="{Binding Path=Genero}" />
 
 
                         </StackPanel>
@@ -218,7 +235,8 @@
                         Margin="10"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         ItemsSource="{Binding}"
-                        ItemTemplate="{StaticResource plantillaPeliculas}">
+                        ItemTemplate="{StaticResource plantillaPeliculas}"
+                        SelectionChanged="ListaPeliculas_SelectionChanged">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel></WrapPanel>
