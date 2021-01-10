@@ -122,14 +122,13 @@
                         <Button
                             x:Name="addPeliculaButton"
                             Margin="3"
-                            DockPanel.Dock="Top">Añadir película</Button>
-                        <TextBlock
-                            x:Name="prueba"
-                            DockPanel.Dock="Top"></TextBlock>
+                            DockPanel.Dock="Top" Click="AddPeliculaButton_Click">Añadir película</Button>
                         <Button
-                            x:Name="examinarPeliculasButton"
-                            Margin="0,0,3,62"
-                            DockPanel.Dock="Bottom">Examinar</Button>
+                            x:Name="quitarSeleccionButton"
+                            Margin="3,10"
+                            DockPanel.Dock="Bottom"
+                            Click="QuitarSeleccionButton_Click">Quitar selección</Button>
+                        
                     </DockPanel>
 
                     <Grid
@@ -179,11 +178,19 @@
                             Grid.Column="0"
                             Text="Imágen de la película"
                             VerticalAlignment="Center" />
+                        <DockPanel
+                            Grid.Row="2"
+                            Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="True">
+                        <Button
+                            x:Name="examinarPeliculasButton"
+                            DockPanel.Dock="Right"
+                            Margin="5"
+                            Click="OpenFile_Click">Examinar</Button>
                         <TextBox
                             x:Name="imagenPeliculaTextBox"
-                            Text="{Binding Path=Imagen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                            Grid.Row="2"
-                            Grid.Column="1" />
+                            Text="{Binding Path=Imagen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            
+                        </DockPanel>
 
                         <TextBlock
                             Grid.Row="3"
