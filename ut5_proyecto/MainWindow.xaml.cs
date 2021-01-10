@@ -29,8 +29,16 @@ namespace ut5_proyecto
             InitializeComponent();
 
             peliculas = new ObservableCollection<Pelicula>();
-            peliculas.Add(new Pelicula("prueba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", Pelicula.Dificultad.facil, Pelicula.Genero.accion));
+            peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", Pelicula.Dificultad.facil, Pelicula.Genero.accion));
             listaPeliculas.DataContext = peliculas;
+            ObservableCollection<string> generos = new ObservableCollection<string>();
+            generos.Add("Comedia");
+            generos.Add("terror");
+            generos.Add("Comedia2");
+            generos.Add("terror2");
+
+            generosComboBox.DataContext = generos;
+            generosComboBox.SelectedItem = generos[0];
         }
 
 

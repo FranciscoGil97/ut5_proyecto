@@ -6,19 +6,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ut5_proyecto"
     mc:Ignorable="d"
-    Title="MainWindow"
-    Height="450"
-    Width="800">
+    Title="Juego adivina"
+    Height="520"
+    Width="900"
+    MinHeight="490"
+    MinWidth="850">
     <Window.Resources>
         <DataTemplate
             x:Key="plantillaPeliculas">
             <Border
                 BorderBrush="Black"
                 BorderThickness="1"
-                Margin="15"
+                Margin="10"
                 Background="White"
-                Height="300"
-                Width="250">
+                Height="230"
+                Width="180">
                 <Border.Effect>
                     <DropShadowEffect
                         BlurRadius="2"
@@ -27,21 +29,62 @@
                 <DockPanel
                     LastChildFill="True">
                     <Viewbox
-                        Height="60"
-                        Width="200"
-                        DockPanel.Dock="Bottom">
+                        DockPanel.Dock="Bottom"
+                        Height="50">
                         <TextBlock
+                            Background="Aqua"
                             Text="{Binding Titulo}"
-                            FontSize="40"
-                            HorizontalAlignment="Center"/>
+                            FontSize="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0,0,0,5" />
                     </Viewbox>
                     <Image
+                        Margin="5"
                         Source="{Binding Imagen}"
-                        Stretch="UniformToFill"/>
-                    
+                        Stretch="UniformToFill" />
+
                 </DockPanel>
             </Border>
         </DataTemplate>
+
+        <Style
+            TargetType="Button">
+            <Setter
+                Property="BitmapEffect">
+                <Setter.Value>
+                    <DropShadowBitmapEffect
+                        ShadowDepth="4"
+                        Softness="0" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style
+            TargetType="RadioButton">
+            <Setter
+                Property="Margin"
+                Value="5,2" />
+            <Setter
+                Property="GroupName"
+                Value="dificilRadioButton" />
+        </Style>
+
+        <Style
+            TargetType="TextBox">
+            <Setter
+                Property="Grid.ColumnSpan"
+                Value="2" />
+            <Setter
+                Property="BorderBrush"
+                Value="Black" />
+            <Setter
+                Property="BorderThickness"
+                Value="1" />
+            <Setter
+                Property="Margin"
+                Value="4" />
+        </Style>
     </Window.Resources>
     <DockPanel>
         <TabControl
@@ -52,19 +95,137 @@
             </TabItem>
             <TabItem
                 Header="Gestionar">
-                <ListBox
-                    x:Name="listaPeliculas"
-                    Margin="10"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ItemsSource="{Binding}"
-                    ItemTemplate="{StaticResource plantillaPeliculas}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel></WrapPanel>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
+                <DockPanel
+                    LastChildFill="True">
+                    <DockPanel
+                        DockPanel.Dock="Right"
+                        LastChildFill="False"
+                        x:Name="buttonsStackpanel"
+                        Margin="10"
+                        Width="100">
+                        <Button
+                            x:Name="cargarJsonButton"
+                            Margin="3,0"
+                            DockPanel.Dock="Top">Cargar de JSON</Button>
+                        <Button
+                            x:Name="guardarJsonButton"
+                            Margin="3,8"
+                            DockPanel.Dock="Top">Guardar en Json</Button>
+                        <Button
+                            x:Name="eliminarPeliculaButton"
+                            Margin="3,50,3,5"
+                            DockPanel.Dock="Top">Eliminar película</Button>
+                        <Button
+                            x:Name="addPeliculaButton"
+                            Margin="3"
+                            DockPanel.Dock="Top">Añadir película</Button>
+                        <Button
+                            x:Name="examinarPeliculasButton"
+                            Margin="3,0,3,30"
+                            DockPanel.Dock="Bottom">Examinar</Button>
+                    </DockPanel>
 
-                </ListBox>
+                    <Grid
+                        DockPanel.Dock="Bottom"
+                        Margin="10"
+                        Height="150">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="0.5*" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="0.55*" />
+                            <RowDefinition
+                                Height="0.55*" />
+                            <RowDefinition
+                                Height="0.55*" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Título de la película"
+                            VerticalAlignment="Center" />
+                        <TextBox
+                            x:Name="tituloPeliculaTextBox"
+                            Grid.Row="0"
+                            Grid.Column="1" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="Pista de la película"
+                            VerticalAlignment="Center" />
+                        <TextBox
+                            x:Name="pistaPeliculaTextBox"
+                            Grid.Row="1"
+                            Grid.Column="1" />
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Text="Imágen de la película"
+                            VerticalAlignment="Center" />
+                        <TextBox
+                            x:Name="imagenPeliculaTextBox"
+                            Grid.Row="2"
+                            Grid.Column="1" />
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Text="Nivel de dificultad"
+                            VerticalAlignment="Top"
+                            Margin="0,8" />
+
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="1">
+                            <RadioButton
+                                x:Name="facilRadioButton"
+                                Content="Fácil" />
+                            <RadioButton
+                                x:Name="normalRadioButton"
+                                Content="Normal" />
+                            <RadioButton
+                                x:Name="dificilRadioButton"
+                                Content="Difícil" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Text="Género"
+                                VerticalAlignment="Center" />
+                            <ComboBox
+                                VerticalAlignment="Center" 
+                                x:Name="generosComboBox"
+                                ItemsSource="{Binding}"
+                                Margin="10,0"
+                                Width="100"/>
+
+
+                        </StackPanel>
+
+                    </Grid>
+                    <ListBox
+                        x:Name="listaPeliculas"
+                        Margin="10"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding}"
+                        ItemTemplate="{StaticResource plantillaPeliculas}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel></WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </DockPanel>
             </TabItem>
         </TabControl>
     </DockPanel>
