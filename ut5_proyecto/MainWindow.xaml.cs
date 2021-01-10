@@ -87,30 +87,6 @@ namespace ut5_proyecto
             listaPeliculas.SelectedItem = null;
         }
 
-
-        //guardar archivo abriendo un dialogo
-        //private void btnSaveFile_Click(object sender, RoutedEventArgs e)
-        //{
-        ////    < StackPanel >
-        ////< TextBox
-        ////    Name = "txtEditor"
-        ////    TextWrapping = "Wrap"
-        ////    AcceptsReturn = "True"
-        ////    ScrollViewer.VerticalScrollBarVisibility = "Auto" />
-        ////< Button
-        ////    Name = "btnSaveFile"
-        ////    Click = "btnSaveFile_Click" > Save file </ Button >
-
-        ////    < Button
-        ////    Name = "btnOpenFile"
-        ////    Click = "btnOpenFile_Click" > Open file </ Button >
-
-        ////</ StackPanel >
-        //        SaveFileDialog saveFileDialog = new SaveFileDialog();
-        //    if (saveFileDialog.ShowDialog() == true)
-        //        File.WriteAllText(saveFileDialog.FileName, txtEditor.Text);
-        //}
-
         ////abrir un archivos mediante un dialogo
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
@@ -119,19 +95,17 @@ namespace ut5_proyecto
                 imagenPeliculaTextBox.Text = openFileDialog.FileName;
         }
 
-        //private void OpenFile_Click(object sender, RoutedEventArgs e)
-        //{
-        //    OpenFileDialog openFileDialog = new OpenFileDialog();
-        //    if (openFileDialog.ShowDialog() == true)
-        //        imagenPeliculaTextBox.Text = File.ReadAllText(openFileDialog.FileName);
-        //}
-
         private void ExportarButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                string urlArchivo = "";
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                if (saveFileDialog.ShowDialog() == true)
+                    urlArchivo = saveFileDialog.FileName;
+
                 string personasJson = JsonConvert.SerializeObject(peliculas);
-                File.WriteAllText("peliculas.json", personasJson);
+                File.WriteAllText(urlArchivo, personasJson);
             }
             catch (Exception ex)
             {
@@ -143,7 +117,11 @@ namespace ut5_proyecto
         {
             try
             {
-                using (StreamReader jsonStream = File.OpenText("peliculas.json"))
+                string urlArchivo = "";
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == true)
+                    urlArchivo = openFileDialog.FileName;
+                using (StreamReader jsonStream = File.OpenText(urlArchivo))
                 {
                     var json = jsonStream.ReadToEnd();
                     List<Pelicula> peliculasJson = JsonConvert.DeserializeObject<List<Pelicula>>(json);
