@@ -99,5 +99,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="accion.ico" />
+    <Resource Include="comedia.ico" />
+    <Resource Include="drama.ico" />
+    <Resource Include="ficcion.ico" />
+    <Resource Include="terror.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="flecha.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

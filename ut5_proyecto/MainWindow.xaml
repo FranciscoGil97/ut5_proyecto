@@ -91,6 +91,27 @@
             Margin="5">
             <TabItem
                 Header="Jugar">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition
+                            Width="1.2*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition
+                            Height="0.12*" />
+                    </Grid.RowDefinitions>
+
+                    <Image
+                        x:Name="peliculaImage"
+                        Grid.Row="0"
+                        Grid.Column="0" />
+                    
+                    
+
+
+                </Grid>
 
             </TabItem>
             <TabItem
