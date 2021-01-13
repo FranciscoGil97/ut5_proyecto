@@ -171,5 +171,25 @@ namespace ut5_proyecto
             else
                 MessageBox.Show("Para añadir una película no debe haber ninguna pelicula seleccionada.");
         }
+
+        private void NuevaPartidaButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ValidarButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void FlechaIzquierdaImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void FlechaDerechaImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

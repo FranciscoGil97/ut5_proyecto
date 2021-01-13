@@ -102,13 +102,116 @@
                         <RowDefinition
                             Height="0.12*" />
                     </Grid.RowDefinitions>
-
-                    <Image
-                        x:Name="peliculaImage"
+                    <StackPanel
                         Grid.Row="0"
-                        Grid.Column="0" />
-                    
-                    
+                        Grid.Column="0">
+                        <TextBlock
+                            Text="Cartel de la película" Margin="5"/>
+                        <Image
+                            x:Name="peliculaImage"
+                            Stretch="Uniform"
+                            Margin="5" />
+                    </StackPanel>
+
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <DockPanel
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            LastChildFill="False">
+                            <StackPanel
+                                DockPanel.Dock="Left"
+                                Width="100">
+                                <TextBlock
+                                    Text="Puntuación"
+                                    Margin="5,0" />
+                                <Border
+                                    BorderBrush="Black"
+                                    BorderThickness="2"
+                                    Height="70"
+                                    Margin="5">
+                                    <Viewbox>
+                                        <TextBlock
+                                            x:Name="puntuacionTextBlock" />
+                                    </Viewbox>
+                                </Border>
+                            </StackPanel>
+                            <Button
+                                x:Name="nuevaPartidaButton"
+                                Content="Nueva partida"
+                                DockPanel.Dock="Right"
+                                VerticalAlignment="Center"
+                                Margin="10"
+                                Click="NuevaPartidaButton_Click" />
+                        </DockPanel>
+                        <DockPanel
+                            Grid.Row="1"
+                            LastChildFill="False">
+                            <StackPanel
+                                DockPanel.Dock="Left"
+                                VerticalAlignment="Center">
+                                <TextBlock
+                                    Text="Título de la película"
+                                    Margin="10,0" />
+                                <TextBox
+                                    x:Name="tituloPeliculaJuegoTextBox"
+                                    DockPanel.Dock="Left"
+                                    Width="340"
+                                    Margin="10,0" />
+                            </StackPanel>
+                            <Button
+                                x:Name="validarButton"
+                                DockPanel.Dock="Right"
+                                Content="Validar"
+                                Height="19"
+                                Width="60"
+                                Margin="10,20,10,4"
+                                Click="ValidarButton_Click" />
+                        </DockPanel>
+                        <StackPanel
+                            Grid.Row="2"
+                            VerticalAlignment="Center"
+                            Margin="10">
+                            <CheckBox
+                                x:Name="pistaCheckBox"
+                                Content="Pista" />
+                            <TextBlock
+                                x:Name="pistaJuegoTextBlock"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <Image
+                            x:Name="iconoPeliculaImage"
+                            Grid.Row="3"
+                            Height="40"
+                            Width="50" />
+                    </Grid>
+
+
+                    <StackPanel
+                        x:Name="parteInferiorStackPanel"
+                        Orientation="Horizontal"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2" HorizontalAlignment="Center">
+                        <Image
+                            Source="flecha.ico" FlowDirection="RightToLeft" Margin="4" MouseLeftButtonDown="FlechaIzquierdaImage_MouseLeftButtonDown"/>
+                        <Viewbox
+                            Margin="4">
+                            <TextBlock
+                                x:Name="numeroPeliculaTextBlock"
+                                Text="0/0" />
+                        </Viewbox>
+                        <Image
+                            Source="flecha.ico"
+                            Margin="4" MouseLeftButtonDown="FlechaDerechaImage_MouseLeftButtonDown"/>
+                    </StackPanel>
 
 
                 </Grid>
