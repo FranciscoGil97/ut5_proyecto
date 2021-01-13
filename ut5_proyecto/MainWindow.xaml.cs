@@ -24,21 +24,20 @@ namespace ut5_proyecto
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private ObservableCollection<Pelicula> peliculas;
-        string[] dificultades = { "facil", "normal", "dificil" };
-        string[] generos = { "comedia", "drama", "acción", "terror", "ciencia-ficción" };
+        private ObservableCollection<Pelicula> Peliculas;
         public MainWindow()
         {
             InitializeComponent();
 
 
-            peliculas = new ObservableCollection<Pelicula>();
-            peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", "facil", "drama"));
-            peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", "normal", "acción"));
+            Peliculas = new ObservableCollection<Pelicula>();
+            Peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png",Pelicula.Genero.Drama,Pelicula.Dificultad.Facil));
+            Peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", Pelicula.Genero.Acción, Pelicula.Dificultad.Normal));
 
-            listaPeliculas.DataContext = peliculas;
-            generosComboBox.ItemsSource = generos;
+            listaPeliculas.DataContext = Peliculas;
+            generosComboBox.ItemsSource = Enum.GetValues(typeof(Pelicula.Genero));
+
+            
         }
 
         private void ListaPeliculas_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -46,7 +45,7 @@ namespace ut5_proyecto
             if (listaPeliculas.SelectedItem != null)
             {
                 generosComboBox.DataContext = (Pelicula)listaPeliculas.SelectedItem;
-                SeleccionaRaddioButton(((Pelicula)listaPeliculas.SelectedItem).Dificultad);
+                SeleccionaRaddioButton(((Pelicula)listaPeliculas.SelectedItem)._Dificultad);
                 camposGrid.DataContext = (Pelicula)listaPeliculas.SelectedItem;
             }
         }
@@ -56,21 +55,21 @@ namespace ut5_proyecto
             RadioButton rb = sender as RadioButton;
             if (listaPeliculas.SelectedItem != null)
             {
-                if (rb.Tag.ToString() == dificultades[0])
-                    ((Pelicula)listaPeliculas.SelectedItem).Dificultad = dificultades[0];
+                if ((bool)facilRadioButton.IsChecked)
+                    ((Pelicula)listaPeliculas.SelectedItem)._Dificultad = Pelicula.Dificultad.Facil;
                 else
-                    ((Pelicula)listaPeliculas.SelectedItem).Dificultad =
-                            rb.Tag.ToString() == dificultades[1] ? dificultades[1] : dificultades[2];
+                    ((Pelicula)listaPeliculas.SelectedItem)._Dificultad = (bool)normalRadioButton.IsChecked ?
+                                                                Pelicula.Dificultad.Normal : Pelicula.Dificultad.Dificil;
 
             }
 
         }
 
-        private void SeleccionaRaddioButton(string dificultad)
+        private void SeleccionaRaddioButton(Pelicula.Dificultad dificultad)
         {
-            if (dificultad == dificultades[0])
+            if(dificultad==Pelicula.Dificultad.Facil)
                 facilRadioButton.IsChecked = true;
-            else if (dificultad == dificultades[1])
+            else if(dificultad == Pelicula.Dificultad.Normal)
                 normalRadioButton.IsChecked = true;
             else
                 dificilRadioButton.IsChecked = true;
@@ -78,13 +77,13 @@ namespace ut5_proyecto
 
         private void EliminarPeliculaButton_Click(object sender, RoutedEventArgs e)
         {
-            facilRadioButton.IsChecked = false;
-            normalRadioButton.IsChecked = false;
-            dificilRadioButton.IsChecked = false;
-            generosComboBox.DataContext = "";
-            camposGrid.DataContext = "";
-            peliculas.Remove((Pelicula)listaPeliculas.SelectedItem);
-            listaPeliculas.SelectedItem = null;
+            Peliculas.Remove((Pelicula)listaPeliculas.SelectedItem);
+            QuitaSelecciones();
+        }
+
+        private void QuitarSeleccionButton_Click(object sender, RoutedEventArgs e)
+        {
+            QuitaSelecciones();
         }
 
         ////abrir un archivos mediante un dialogo
@@ -104,7 +103,7 @@ namespace ut5_proyecto
                 if (saveFileDialog.ShowDialog() == true)
                     urlArchivo = saveFileDialog.FileName;
 
-                string personasJson = JsonConvert.SerializeObject(peliculas);
+                string personasJson = JsonConvert.SerializeObject(Peliculas);
                 File.WriteAllText(urlArchivo, personasJson);
             }
             catch (Exception ex)
@@ -119,6 +118,7 @@ namespace ut5_proyecto
             {
                 string urlArchivo = "";
                 OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "Json files (*.json)|*.json";
                 if (openFileDialog.ShowDialog() == true)
                     urlArchivo = openFileDialog.FileName;
                 using (StreamReader jsonStream = File.OpenText(urlArchivo))
@@ -127,7 +127,7 @@ namespace ut5_proyecto
                     List<Pelicula> peliculasJson = JsonConvert.DeserializeObject<List<Pelicula>>(json);
 
                     foreach (Pelicula p in peliculasJson)
-                        peliculas.Add(p);
+                        Peliculas.Add(p);
                 }
             }
             catch (Exception ex)
@@ -136,12 +136,13 @@ namespace ut5_proyecto
             }
         }
 
-        private void QuitarSeleccionButton_Click(object sender, RoutedEventArgs e)
+
+        private void QuitaSelecciones()
         {
             facilRadioButton.IsChecked = false;
             normalRadioButton.IsChecked = false;
             dificilRadioButton.IsChecked = false;
-            generosComboBox.DataContext = "";
+            generosComboBox.DataContext = null;
             camposGrid.DataContext = "";
             listaPeliculas.SelectedItem = null;
         }
@@ -153,16 +154,22 @@ namespace ut5_proyecto
                 string titulo = tituloPeliculaTextBox.Text;
                 string pista = pistaPeliculaTextBox.Text;
                 string imagen = imagenPeliculaTextBox.Text;
-                string genero = generosComboBox.SelectedValue != null ? generosComboBox.SelectedValue.ToString() : generos[0];
-                string dificultad;
+
+                Pelicula.Genero genero = (Pelicula.Genero)generosComboBox.SelectedIndex;
+                Pelicula.Dificultad dificultad;
 
                 if ((bool)facilRadioButton.IsChecked)
-                    dificultad = dificultades[0];
+                    dificultad = Pelicula.Dificultad.Facil;
                 else
-                    dificultad = (bool)normalRadioButton.IsChecked ? dificultades[1] : dificultades[2];
+                    dificultad = (bool)normalRadioButton.IsChecked ? Pelicula.Dificultad.Normal : Pelicula.Dificultad.Dificil;
 
-                peliculas.Add(new Pelicula(titulo, pista, imagen, dificultad, genero));
+
+                Peliculas.Add(new Pelicula(titulo, pista, imagen, genero, dificultad));
+
+                QuitaSelecciones();
             }
+            else
+                MessageBox.Show("Para añadir una película no debe haber ninguna pelicula seleccionada.");
         }
     }
 }

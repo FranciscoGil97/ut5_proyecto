@@ -122,13 +122,14 @@
                         <Button
                             x:Name="addPeliculaButton"
                             Margin="3"
-                            DockPanel.Dock="Top" Click="AddPeliculaButton_Click">Añadir película</Button>
+                            DockPanel.Dock="Top"
+                            Click="AddPeliculaButton_Click">Añadir película</Button>
                         <Button
                             x:Name="quitarSeleccionButton"
                             Margin="3,10"
                             DockPanel.Dock="Bottom"
                             Click="QuitarSeleccionButton_Click">Quitar selección</Button>
-                        
+
                     </DockPanel>
 
                     <Grid
@@ -160,7 +161,7 @@
                             x:Name="tituloPeliculaTextBox"
                             Text="{Binding Path=Titulo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Grid.Row="0"
-                            Grid.Column="1"/>
+                            Grid.Column="1" />
 
                         <TextBlock
                             Grid.Row="1"
@@ -180,16 +181,18 @@
                             VerticalAlignment="Center" />
                         <DockPanel
                             Grid.Row="2"
-                            Grid.Column="1" Grid.ColumnSpan="2" LastChildFill="True">
-                        <Button
-                            x:Name="examinarPeliculasButton"
-                            DockPanel.Dock="Right"
-                            Margin="5"
-                            Click="OpenFile_Click">Examinar</Button>
-                        <TextBox
-                            x:Name="imagenPeliculaTextBox"
-                            Text="{Binding Path=Imagen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            LastChildFill="True">
+                            <Button
+                                x:Name="examinarPeliculasButton"
+                                DockPanel.Dock="Right"
+                                Margin="5"
+                                Click="OpenFile_Click">Examinar</Button>
+                            <TextBox
+                                x:Name="imagenPeliculaTextBox"
+                                Text="{Binding Path=Imagen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
                         </DockPanel>
 
                         <TextBlock
@@ -204,16 +207,19 @@
                             Grid.Column="1">
                             <RadioButton
                                 x:Name="facilRadioButton"
+                                GroupName="DificultadRadionButtons"
                                 Content="Fácil"
                                 Tag="facil"
                                 Checked="DificultadRadioButton_Checked" />
                             <RadioButton
                                 x:Name="normalRadioButton"
+                                GroupName="DificultadRadionButtons"
                                 Content="Normal"
                                 Tag="normal"
                                 Checked="DificultadRadioButton_Checked" />
                             <RadioButton
                                 x:Name="dificilRadioButton"
+                                GroupName="DificultadRadionButtons"
                                 Content="Difícil"
                                 Tag="dificil"
                                 Checked="DificultadRadioButton_Checked" />
@@ -230,10 +236,8 @@
                                 VerticalAlignment="Center"
                                 x:Name="generosComboBox"
                                 Margin="10,0"
-                                Width="100"
-                                SelectedItem="{Binding Path=Genero}" />
-
-
+                                Width="120"
+                                SelectedItem="{Binding Path=_Genero}" />
                         </StackPanel>
 
                     </Grid>

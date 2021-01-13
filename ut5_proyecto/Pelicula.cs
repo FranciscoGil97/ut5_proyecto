@@ -11,23 +11,22 @@ namespace ut5_proyecto
     public class Pelicula : INotifyPropertyChanged
     {
 
-        
+        public enum Genero { Comedia, Drama, Acción, Terror, CienciaFicción };
+        public enum Dificultad { Facil, Normal, Dificil};
 
-        
-        
         private string titulo;
         private string pista;
         private string imagen;
-        private string dificultad;
-        private string genero;
+        private Genero genero;
+        private Dificultad dificultad;
 
-        public Pelicula(string titulo, string pista, string imagen, string dificultad, string genero)
+        public Pelicula(string titulo, string pista, string imagen, Genero generoEnum, Dificultad dificultadEnum)
         {
             Titulo = titulo;
             Pista = pista;
             Imagen = imagen;
-            Dificultad = dificultad;
-            Genero = genero;
+            _Genero = generoEnum;
+            _Dificultad = dificultadEnum;
         }
 
         public Pelicula()
@@ -35,11 +34,11 @@ namespace ut5_proyecto
             Titulo = "";
             Pista = "";
             Imagen = "";
-            Dificultad = "";
-            Genero = "";
+            _Genero = Genero.Acción;
+            _Dificultad = Dificultad.Facil;
         }
 
-        public string Titulo 
+        public string Titulo
         {
             get { return titulo; }
             set
@@ -53,8 +52,8 @@ namespace ut5_proyecto
         public string Pista
         {
             get { return pista; }
-            set 
-            { 
+            set
+            {
                 pista = value;
                 NotifyPropertyChanged("Pista");
             }
@@ -64,34 +63,34 @@ namespace ut5_proyecto
         public string Imagen
         {
             get { return imagen; }
-            set 
-            { 
+            set
+            {
                 imagen = value;
                 NotifyPropertyChanged("Imagen");
             }
         }
 
-
-        public string Dificultad
+        public Genero _Genero
         {
-            get { return dificultad; }
-            set 
-            { 
-                dificultad = value;
-                NotifyPropertyChanged("Dificultad");
-            }
-        }
-
-
-        public string Genero
-        {
-            get { return genero; }
-            set 
-            { 
+            get => genero; 
+            set
+            {
                 genero = value;
-                NotifyPropertyChanged("Genero");
+                NotifyPropertyChanged("_Genero");
             }
         }
+
+        public Dificultad _Dificultad
+        {
+            get => dificultad;
+            set
+            {
+                dificultad = value;
+                NotifyPropertyChanged("_Dificultad");
+            }
+        }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
