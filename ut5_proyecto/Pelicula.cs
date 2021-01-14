@@ -12,7 +12,7 @@ namespace ut5_proyecto
     {
 
         public enum Genero { Comedia, Drama, Acción, Terror, CienciaFicción };
-        public enum Dificultad { Facil, Normal, Dificil};
+        public enum Dificultad { Facil = 10, Normal = 20, Dificil = 30 };
 
         private string titulo;
         private string pista;
@@ -72,7 +72,7 @@ namespace ut5_proyecto
 
         public Genero _Genero
         {
-            get => genero; 
+            get => genero;
             set
             {
                 genero = value;

@@ -5,13 +5,67 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ut5_proyecto"
+    xmlns:generoE="clr-namespace:ut5_proyecto;assembly=ut5_proyecto"
     mc:Ignorable="d"
     Title="Juego adivina"
-    Height="520"
+    Height="650"
     Width="900"
     MinHeight="490"
-    MinWidth="850">
+    MinWidth="850"
+    
+    UseLayoutRounding="True">
     <Window.Resources>
+        <Style
+            x:Key="iconoGenero" TargetType="Image">
+            <Setter
+                Property="Height"
+                Value="40" />
+            <Setter
+                Property="Width"
+                Value="50" />
+            <Style.Triggers>
+                <DataTrigger
+                    Binding="{Binding Path=_Genero}"
+                    Value="{x:Static generoE:Pelicula+Genero.Comedia}">
+                    <Setter
+                        Property="Source"
+                        Value="/comedia.ico" />
+                </DataTrigger>
+
+                <DataTrigger
+                    Binding="{Binding Path=_Genero}"
+                    Value="{x:Static generoE:Pelicula+Genero.Drama}">
+                    <Setter
+                        Property="Source"
+                        Value="/drama.ico" />
+                </DataTrigger>
+
+                <DataTrigger
+                    Binding="{Binding Path=_Genero}"
+                    Value="{x:Static generoE:Pelicula+Genero.Acción}">
+                    <Setter
+                        Property="Source"
+                        Value="/accion.ico" />
+                </DataTrigger>
+
+                <DataTrigger
+                    Binding="{Binding Path=_Genero}"
+                    Value="{x:Static generoE:Pelicula+Genero.Terror}">
+                    <Setter
+                        Property="Source"
+                        Value="/terror.ico" />
+                </DataTrigger>
+                <DataTrigger
+                    Binding="{Binding Path=_Genero}"
+                    Value="{x:Static generoE:Pelicula+Genero.CienciaFicción}">
+                    <Setter
+                        Property="Source"
+                        Value="/ficcion.ico" />
+                </DataTrigger>
+
+            </Style.Triggers>
+        </Style>
+        
         <DataTemplate
             x:Key="plantillaPeliculas">
             <Border
@@ -91,7 +145,7 @@
             Margin="5">
             <TabItem
                 Header="Jugar">
-                <Grid>
+                <Grid x:Name="pestanyJugarGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition
@@ -100,17 +154,20 @@
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition
-                            Height="0.12*" />
+                            Height="40" />
                     </Grid.RowDefinitions>
                     <StackPanel
                         Grid.Row="0"
-                        Grid.Column="0">
+                        Grid.Column="0"
+                        ScrollViewer.CanContentScroll="True">
                         <TextBlock
-                            Text="Cartel de la película" Margin="5"/>
+                            Text="Cartel de la película"
+                            Margin="5,0" />
                         <Image
                             x:Name="peliculaImage"
-                            Stretch="Uniform"
-                            Margin="5" />
+                            Source="{Binding Path=Imagen}" />
+
+
                     </StackPanel>
 
                     <Grid
@@ -181,16 +238,21 @@
                             Margin="10">
                             <CheckBox
                                 x:Name="pistaCheckBox"
-                                Content="Pista" />
+                                Content="Pista" 
+                                Checked="PistaCheckBox_Checked"/>
                             <TextBlock
                                 x:Name="pistaJuegoTextBlock"
                                 TextWrapping="Wrap" />
                         </StackPanel>
-                        <Image
+                        <StackPanel
+                            Grid.Row="3" HorizontalAlignment="Center">
+                            <TextBlock
+                                Text="Género" Margin="5"/>
+                            <Image
                             x:Name="iconoPeliculaImage"
-                            Grid.Row="3"
-                            Height="40"
-                            Width="50" />
+                            Style="{StaticResource iconoGenero}"/>
+                            
+                        </StackPanel>
                     </Grid>
 
 
