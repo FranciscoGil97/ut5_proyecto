@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace ut5_proyecto
 {
@@ -12,6 +6,8 @@ namespace ut5_proyecto
     {
 
         public enum Genero { Comedia, Drama, Acción, Terror, CienciaFicción };
+        
+        //El valor del enumerado de dificultad equivale a los puntos.
         public enum Dificultad { Facil = 10, Normal = 20, Dificil = 30 };
 
         private string titulo;

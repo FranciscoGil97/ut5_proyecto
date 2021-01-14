@@ -2,42 +2,33 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 
 namespace ut5_proyecto
 {
-    /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private ObservableCollection<Pelicula> Peliculas;
+        private const int NUMEROPELICULASJUEGO = 5;
+        private List<int> indicePeliculasAleatoria = new List<int>();
+        private List<int> indicePeliculaAcertada = new List<int>();
+        private int numeroPeliculaJuego = 0;
+        private int puntos = 0;
+        private bool partidaIniciada = false;
+
         public MainWindow()
         {
             InitializeComponent();
-
-
             Peliculas = new ObservableCollection<Pelicula>();
-            //Peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png",Pelicula.Genero.Drama,Pelicula.Dificultad.Facil));
-            //Peliculas.Add(new Pelicula("prudsfdsfsdfeba", "pista", @"https://www.wpf-tutorial.com/Images/ArticleImages/1/chapters/dialogs/openfiledialog_simple_app.png", Pelicula.Genero.Acción, Pelicula.Dificultad.Normal));
 
             listaPeliculas.DataContext = Peliculas;
             generosComboBox.ItemsSource = Enum.GetValues(typeof(Pelicula.Genero));
-
-            
+            puntuacionTextBlock.DataContext = puntos;
         }
 
         private void ListaPeliculas_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -47,7 +38,6 @@ namespace ut5_proyecto
                 generosComboBox.DataContext = (Pelicula)listaPeliculas.SelectedItem;
                 SeleccionaRaddioButton(((Pelicula)listaPeliculas.SelectedItem)._Dificultad);
                 camposGrid.DataContext = (Pelicula)listaPeliculas.SelectedItem;
-                pestanyJugarGrid.DataContext= (Pelicula)listaPeliculas.SelectedItem;
             }
         }
 
@@ -66,9 +56,9 @@ namespace ut5_proyecto
 
         private void SeleccionaRaddioButton(Pelicula.Dificultad dificultad)
         {
-            if(dificultad==Pelicula.Dificultad.Facil)
+            if (dificultad == Pelicula.Dificultad.Facil)
                 facilRadioButton.IsChecked = true;
-            else if(dificultad == Pelicula.Dificultad.Normal)
+            else if (dificultad == Pelicula.Dificultad.Normal)
                 normalRadioButton.IsChecked = true;
             else
                 dificilRadioButton.IsChecked = true;
@@ -141,7 +131,7 @@ namespace ut5_proyecto
             facilRadioButton.IsChecked = false;
             normalRadioButton.IsChecked = false;
             dificilRadioButton.IsChecked = false;
-            generosComboBox.DataContext = null;
+            generosComboBox.DataContext = "";
             camposGrid.DataContext = "";
             listaPeliculas.SelectedItem = null;
         }
@@ -166,36 +156,102 @@ namespace ut5_proyecto
                 Peliculas.Add(new Pelicula(titulo, pista, imagen, genero, dificultad));
 
                 QuitaSelecciones();
+                tituloPeliculaTextBox.Text = "";
+                pistaPeliculaTextBox.Text = "";
+                imagenPeliculaTextBox.Text = "";
             }
             else
                 MessageBox.Show("Para añadir una película no debe haber ninguna pelicula seleccionada.");
         }
 
-
-
         private void NuevaPartidaButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Peliculas.Count >= 5)
+            {
+                indicePeliculasAleatoria = new List<int>();
+                indicePeliculaAcertada = new List<int>();
+                numeroPeliculaJuego = 0;
+                partidaIniciada = true;
+                Random seed = new Random();
 
+                for (int i = 0; i < NUMEROPELICULASJUEGO; i++)
+                {
+                    int numRandom = seed.Next(0, Peliculas.Count);
+
+                    if (!indicePeliculasAleatoria.Contains(numRandom))
+                        indicePeliculasAleatoria.Add(numRandom);
+                    else
+                        i--;
+                }
+                numeroPeliculaTextBlock.Text = (numeroPeliculaJuego + 1) + "/" + NUMEROPELICULASJUEGO;
+                pestanyJugarGrid.DataContext = Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]];
+            }
+            else
+                MessageBox.Show("Deben haber al menos 5 películas para poder jugar.");
         }
 
         private void ValidarButton_Click(object sender, RoutedEventArgs e)
         {
+            if (partidaIniciada && !indicePeliculaAcertada.Contains(indicePeliculasAleatoria[numeroPeliculaJuego]) && tituloPeliculaJuegoTextBox.Text == Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]].Titulo)
+            {
+                int dividePuntos = 1;
+                if ((bool)pistaCheckBox.IsChecked)
+                    dividePuntos = 2;
 
+                puntos += (int)Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]]._Dificultad / dividePuntos;
+                puntuacionTextBlock.DataContext = puntos;
+
+                indicePeliculaAcertada.Add(indicePeliculasAleatoria[numeroPeliculaJuego]);
+                tituloPeliculaJuegoTextBox.BorderBrush = Brushes.Black;
+            }
+            else
+            {
+                if (!indicePeliculaAcertada.Contains(indicePeliculasAleatoria[numeroPeliculaJuego]))
+                    tituloPeliculaJuegoTextBox.BorderBrush = Brushes.Red;
+
+            }
         }
 
         private void FlechaIzquierdaImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            if (numeroPeliculaJuego > 0 && partidaIniciada)
+            {
+                --numeroPeliculaJuego;
+                pestanyJugarGrid.DataContext = Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]];
+                numeroPeliculaTextBlock.Text = (numeroPeliculaJuego + 1) + "/" + NUMEROPELICULASJUEGO;
+                BorraPantallaJuego();
+            }
         }
 
         private void FlechaDerechaImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (numeroPeliculaJuego < NUMEROPELICULASJUEGO - 1 && partidaIniciada)
+            {
+                indicePeliculaAcertada.Add(indicePeliculasAleatoria[numeroPeliculaJuego]);
+                ++numeroPeliculaJuego;
+                pestanyJugarGrid.DataContext = Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]];
+                numeroPeliculaTextBlock.Text = (numeroPeliculaJuego + 1) + "/" + NUMEROPELICULASJUEGO;
+                BorraPantallaJuego();
+            }
+        }
 
+        private void BorraPantallaJuego()
+        {
+            pistaCheckBox.IsChecked = false;
+            pistaCheckBox.IsEnabled = true;
+            pistaJuegoTextBlock.Width = 0;
+            tituloPeliculaJuegoTextBox.Text = "";
+            tituloPeliculaJuegoTextBox.BorderBrush = Brushes.Black;
         }
 
         private void PistaCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-
+            if ((bool)pistaCheckBox.IsChecked && partidaIniciada)
+            {
+                pistaJuegoTextBlock.Width = 450d;
+                pistaJuegoTextBlock.Text = Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]].Pista;
+                pistaCheckBox.IsEnabled = false;
+            }
         }
     }
 }

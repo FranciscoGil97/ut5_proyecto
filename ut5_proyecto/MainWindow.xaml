@@ -12,7 +12,7 @@
     Width="900"
     MinHeight="490"
     MinWidth="850"
-    
+    Icon="/juego.ico"
     UseLayoutRounding="True">
     <Window.Resources>
         <Style
@@ -86,7 +86,6 @@
                         DockPanel.Dock="Bottom"
                         Height="50">
                         <TextBlock
-                            Background="Aqua"
                             Text="{Binding Titulo}"
                             FontSize="30"
                             HorizontalAlignment="Center"
@@ -165,6 +164,7 @@
                             Margin="5,0" />
                         <Image
                             x:Name="peliculaImage"
+                            Opacity="0.5"
                             Source="{Binding Path=Imagen}" />
 
 
@@ -185,7 +185,8 @@
                             LastChildFill="False">
                             <StackPanel
                                 DockPanel.Dock="Left"
-                                Width="100">
+                                Width="100"
+                                VerticalAlignment="Center">
                                 <TextBlock
                                     Text="Puntuación"
                                     Margin="5,0" />
@@ -196,7 +197,8 @@
                                     Margin="5">
                                     <Viewbox>
                                         <TextBlock
-                                            x:Name="puntuacionTextBlock" />
+                                            x:Name="puntuacionTextBlock"
+                                            Text="{Binding UpdateSourceTrigger=PropertyChanged}"/>
                                     </Viewbox>
                                 </Border>
                             </StackPanel>
@@ -242,7 +244,10 @@
                                 Checked="PistaCheckBox_Checked"/>
                             <TextBlock
                                 x:Name="pistaJuegoTextBlock"
-                                TextWrapping="Wrap" />
+                                Height="20"
+                                Width="0"
+                                TextWrapping="Wrap" 
+                                Text="{Binding Path=Pista}"/>
                         </StackPanel>
                         <StackPanel
                             Grid.Row="3" HorizontalAlignment="Center">
