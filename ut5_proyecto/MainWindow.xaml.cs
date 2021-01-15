@@ -17,6 +17,7 @@ namespace ut5_proyecto
         private const int NUMEROPELICULASJUEGO = 5;
         private List<int> indicePeliculasAleatoria = new List<int>();
         private List<int> indicePeliculaAcertada = new List<int>();
+        private List<int> indicePeliculaPistaVista = new List<int>();
         private int numeroPeliculaJuego = 0;
         private int puntos = 0;
         private bool partidaIniciada = false;
@@ -29,6 +30,7 @@ namespace ut5_proyecto
             listaPeliculas.DataContext = Peliculas;
             generosComboBox.ItemsSource = Enum.GetValues(typeof(Pelicula.Genero));
             puntuacionTextBlock.DataContext = puntos;
+            pistaCheckBox.IsEnabled = false;
         }
 
         private void ListaPeliculas_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -75,7 +77,6 @@ namespace ut5_proyecto
             QuitaSelecciones();
         }
 
-        //abrir un archivos mediante un dialogo
         private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -138,7 +139,7 @@ namespace ut5_proyecto
 
         private void AddPeliculaButton_Click(object sender, RoutedEventArgs e)
         {
-            if (listaPeliculas.SelectedItem == null)
+            if (listaPeliculas.SelectedItem == null && EstanCamposLlenos())
             {
                 string titulo = tituloPeliculaTextBox.Text;
                 string pista = pistaPeliculaTextBox.Text;
@@ -152,7 +153,6 @@ namespace ut5_proyecto
                 else
                     dificultad = (bool)normalRadioButton.IsChecked ? Pelicula.Dificultad.Normal : Pelicula.Dificultad.Dificil;
 
-
                 Peliculas.Add(new Pelicula(titulo, pista, imagen, genero, dificultad));
 
                 QuitaSelecciones();
@@ -160,8 +160,15 @@ namespace ut5_proyecto
                 pistaPeliculaTextBox.Text = "";
                 imagenPeliculaTextBox.Text = "";
             }
+            else if (!EstanCamposLlenos())
+                MessageBox.Show("Para poder añadir una película los campos no deben estar vacios");
             else
                 MessageBox.Show("Para añadir una película no debe haber ninguna pelicula seleccionada.");
+        }
+
+        private bool EstanCamposLlenos()
+        {
+            return tituloPeliculaTextBox.Text != "" && pistaPeliculaTextBox.Text != "" && imagenPeliculaTextBox.Text != "" && generosComboBox.SelectedItem != null;
         }
 
         private void NuevaPartidaButton_Click(object sender, RoutedEventArgs e)
@@ -172,6 +179,7 @@ namespace ut5_proyecto
                 indicePeliculaAcertada = new List<int>();
                 numeroPeliculaJuego = 0;
                 partidaIniciada = true;
+                pistaCheckBox.IsEnabled = true;
                 Random seed = new Random();
 
                 for (int i = 0; i < NUMEROPELICULASJUEGO; i++)
@@ -192,10 +200,12 @@ namespace ut5_proyecto
 
         private void ValidarButton_Click(object sender, RoutedEventArgs e)
         {
-            if (partidaIniciada && !indicePeliculaAcertada.Contains(indicePeliculasAleatoria[numeroPeliculaJuego]) && tituloPeliculaJuegoTextBox.Text == Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]].Titulo)
+            if (partidaIniciada 
+                && !indicePeliculaAcertada.Contains(indicePeliculasAleatoria[numeroPeliculaJuego]) 
+                && tituloPeliculaJuegoTextBox.Text == Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]].Titulo)
             {
                 int dividePuntos = 1;
-                if ((bool)pistaCheckBox.IsChecked)
+                if (indicePeliculaPistaVista.Contains(indicePeliculasAleatoria[numeroPeliculaJuego]))
                     dividePuntos = 2;
 
                 puntos += (int)Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]]._Dificultad / dividePuntos;
@@ -206,7 +216,7 @@ namespace ut5_proyecto
             }
             else
             {
-                if (!indicePeliculaAcertada.Contains(indicePeliculasAleatoria[numeroPeliculaJuego]))
+                if (partidaIniciada && !indicePeliculaAcertada.Contains(indicePeliculasAleatoria[numeroPeliculaJuego]))
                     tituloPeliculaJuegoTextBox.BorderBrush = Brushes.Red;
 
             }
@@ -227,7 +237,6 @@ namespace ut5_proyecto
         {
             if (numeroPeliculaJuego < NUMEROPELICULASJUEGO - 1 && partidaIniciada)
             {
-                indicePeliculaAcertada.Add(indicePeliculasAleatoria[numeroPeliculaJuego]);
                 ++numeroPeliculaJuego;
                 pestanyJugarGrid.DataContext = Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]];
                 numeroPeliculaTextBlock.Text = (numeroPeliculaJuego + 1) + "/" + NUMEROPELICULASJUEGO;
@@ -250,6 +259,7 @@ namespace ut5_proyecto
             {
                 pistaJuegoTextBlock.Width = 450d;
                 pistaJuegoTextBlock.Text = Peliculas[indicePeliculasAleatoria[numeroPeliculaJuego]].Pista;
+                indicePeliculaPistaVista.Add(indicePeliculasAleatoria[numeroPeliculaJuego]);
                 pistaCheckBox.IsEnabled = false;
             }
         }

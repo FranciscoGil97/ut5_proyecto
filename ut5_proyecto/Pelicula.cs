@@ -86,8 +86,6 @@ namespace ut5_proyecto
             }
         }
 
-
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string propertyName)
